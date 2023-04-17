@@ -1,0 +1,40 @@
+id :10311
+ Nume:George Tudor
+ Anul Nasterii:11 03 2000
+ Contacte:0734234560
+ Studii:fara studii
+ Experienta:lucrator necalificat
+ Joburi dorite:fara preferinte
+ Abilitati:orice tip de lucru fizic
+ alte informatii:fara
+
+id :11023
+ Nume:Alexandru Catana
+ Anul Nasterii:30 03 1995
+ Contacte:alexandru.catana@mail.ro
+ Studii:2014 liceu , 2018 universitatea ingininerie
+ Experienta:2 ani inginer la fabrica
+ Joburi dorite:inginer electric
+ Abilitati:-
+ Alte informatii:-
+
+id :12189
+ Nume:Alexandru Ioan
+ Anul Nasterii:29 08 2002
+ Contacte:Ioan.alexandru@mail.ro
+ Studii:2018 - 2022 liceu
+ Experienta:2 ani munca necalificata
+ Joburi dorite:constructii
+ Abilitati:experienta in constructii
+ Alte informatii:nu
+
+id :19743
+ Nume:Andrei Sviridov
+ Anul Nasterii:29 08 2002
+ Contacte:andrei.sviridov@e-uvt.ro
+ Studii:2018 - 2022 cni PM, 2022 prezent uvt fmi
+ Experienta:fara experienta
+ Joburi dorite:python developer
+ Abilitati:c/c++ python
+ Alte informatii:nu
+
