@@ -1,4 +1,4 @@
-///  Project.pp
+/  Project.pp
 //
 //  Created by Andrei Sviridov  on 06.03.2023.
 //Sistem rețea socializare jobs
@@ -9,12 +9,14 @@
 //un cuvânt introdus de utilizator.
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
-#include <time.h>
+#include <unistd.h>Solicitare_Cvrm.h>
 void inapoi(void);
-void Stergere(void);
+void Stergere(const char* );
 void modificare_CV(void);
 void modificare_Oferta(void);
+void CautareDupaId(const char*);
+void CautareDupaId_Joburi(const char* ) ;
+void StergereDupaId(const char* );
 
 void Prima_pagina()
 {fflush(stdout);
@@ -69,6 +71,7 @@ void Construire_CV(){
     fgets(cv.Nume_Prenume, 100, stdin);
     strcat(nume_eror,cv.Nume_Prenume);
     strcpy(cv.Nume_Prenume,nume_eror);
+
     printf(" Introduceti anul nasterii (zi luna an) : ");
     fflush(stdout);
 
@@ -130,16 +133,15 @@ if (f == NULL) {
     return;
 }
 
-// Initializam o lista goala
-struct CV lista_citita[100]; // presupunem ca nu vom citi mai mult de 100 de structuri
+
+struct CV lista_citita[100];
 int nr_cv = 0;
 
-// Citim structurile din fisier si le adaugam in lista
+
 while (nr_cv < 200 && fread(&lista_citita[nr_cv], sizeof(struct CV), 1, f) == 1) {
        nr_cv++;
    }
 
-// Inchidem fisierul
 fclose(f);
     int  alege_cautare;
     long  id;
@@ -151,40 +153,35 @@ fclose(f);
     printf(" 2<- Stergerea dupa id\n");
     printf(" 3<- Afisarea tuturor CV-urilor\n");
     printf(" 4<- Inapoi\n");
+
     scanf("%d",&alege_cautare);
+
     if(alege_cautare==1)
-    {printf("Introduceti id : ");
-        scanf("%ld",&id);
-      for(int i =0;i<100;i++)
-        {
-            if(lista_citita[i].id == id)
-           {
-    printf("\nNume si prenume: %s\n", lista_citita[i].Nume_Prenume);
-    printf("Studii: %s\n", lista_citita[i].Studii);
-    printf("Experienta: %s\n", lista_citita[i].Experienta);
-    printf("Joburi dorite: %s\n", lista_citita[i].Joburi_dorite);
-    printf("Abilitati: %s\n", lista_citita[i].Abilitati);
-    printf("Descriere: %s\n", lista_citita[i].Descriere);
-    printf("Email: %s\n", lista_citita[i].Email);
-    printf("Data nasterii: %s\n", lista_citita[i].Nastere);
-    printf("ID: %d\n", lista_citita[i].id);
-}
+    {
+        printf("Introduceti id : ");
+        const char id_cautat[20];
+        scanf("%s",&id);
+         CautareDupaId(id_cautat);
+          system("pause");
+    system("cls");
+        inapoi();
+
       }
 
-        printf("1<- Inapoi : \n");
-        printf(" Introduceti cifra corespunzatoare : ");
-        scanf("%d",&alegere_sol);
-      if(alege_cautare == 1)
-    {    system("cls");
-        inapoi();
-    }
-    }
-    if (alege_cautare == 2)
-   {   system("cls");
-       Stergere();
-   }
- if (alege_cautare == 3) {
 
+    if (alege_cautare == 2)
+   {     system("cls");
+        const char id_de_sters[20];
+        printf("Introduceti Id Cv pentru a fi sters : ");
+        scanf("%s",&id_de_sters);
+        Stergere(id_de_sters);
+         system("pause");
+    system("cls");
+        inapoi();
+   }
+
+ if (alege_cautare == 3) {
+    system("cls");
     FILE *file = fopen("CV_uri.txt", "r");
 
         if (file == NULL) {
@@ -197,9 +194,9 @@ fclose(f);
         }
         fclose(file);
 
-system("pause");
-        system("cls");
-    inapoi();
+        system("pause");
+ system("cls");
+        inapoi();
 
 
 
@@ -217,7 +214,9 @@ void job_disp() {
     int cautare;
     char job[50];
     printf("1<- Afisarea tuturor joburilor disponibile : \n");
-    printf("2<- Inapoi \n");
+    printf("2<- Afisarea dupa id : \n");
+    printf("3<- Stergere dupa id : \n");
+    printf("4<- Inapoi \n");
     scanf("%d",&cautare);
 
     if (cautare == 1) {
@@ -238,7 +237,27 @@ void job_disp() {
         system("cls");
         inapoi();
     }
-    if (cautare == 2) {
+    if(cautare == 2)
+    {
+        const char id_cautat[20];
+        printf("Introduceti id-ul cautat : ");
+        scanf("%s",&id_cautat);
+      CautareDupaId_Joburi( id_cautat);
+        system("pause");
+        system("cls");
+        inapoi();
+    }
+    if(cautare == 3)
+    {
+         const char id_de_sters[20];
+        printf("Introduceti id-ul pentru stergere  : ");
+        scanf("%s",&id_de_sters);
+        StergereDupaId(id_de_sters);
+        system("pause");
+        system("cls");
+        inapoi();
+    }
+    if (cautare == 4) {
         system("cls");
         inapoi();
     }
@@ -251,6 +270,7 @@ typedef struct {
     char cerinte[2000];
     char scurta_descriere[1500];
     char contacte[300];
+    int id_job;
 } OfertaJob;
 
 void Depunere_oferta() {
@@ -283,95 +303,21 @@ strcat(nume_eror,oferta.companie);
         printf("Eroare la deschiderea fisierului.\n");
         return;
     }
+      time_t t;
+    srand((unsigned) time(&t));
+    oferta.id_job = rand();
 
-    fprintf(f, "Companie: %sTip job: %sCerinte candidat: %sScurta descriere: %sContacte: %s\n",
-            oferta.companie, oferta.tip_job, oferta.cerinte, oferta.scurta_descriere, oferta.contacte);
+    fprintf(f, "id :%d\nCompanie: %sTip job: %sCerinte candidat: %sScurta descriere: %sContacte: %s\n",
+                oferta.id_job,oferta.companie, oferta.tip_job, oferta.cerinte, oferta.scurta_descriere, oferta.contacte);
 
     fclose(f);
-    printf("Oferta a fost cu succes depusa.\n");
+    printf("Oferta a fost cu succes depusa. id - ul este -- %d --\n",oferta.id_job);
     system("pause");
     system("cls");
     inapoi();
 }
 
 
-void Stergere(){
-    int id;
-    printf(" Introduceti id-ul din CV : ");
-    scanf("%d",&id);
-//    compararea unui id ddaca exista
-    printf("CV-ul %d a fost sters \n",id);
-    system("pause");
-    system("cls");
-    inapoi();
-
-}
-
-
-
-
-void modificare_stergere()
-{
-    int alegere,id;
-    printf("1 <- Pentru modificare ofertei :\n");
-    printf("2 <- Pentru stergerea ofertei :\n");
-    printf("3 <- Inapoi\n");
-
-    printf("Introduceti cifra corespunzatoare : ");
-    scanf("%d",&alegere);
-    if(alegere == 1)
-    {
-        printf("introduceti id : ");
-        scanf("%d",&id);
-        modificare_Oferta();
-        system("pause");
-        system("cls");
-        inapoi();
-    }
-    if(alegere == 2)
-    { printf("introduceti id : ");
-        scanf("%d",&id);
-        printf("%d a fost sters \n",id);
-        system("pause");
-        system("cls");
-        inapoi();
-    }
-    if(alegere == 3)
-    {system("cls");
-        inapoi();
-    }
-}
-
-
-
-void modificare_Oferta(){
-    int cifra;
-printf("1<- Pentru modificare numele companiei : \n");
-printf("2<- Pentru modificare tipul jobului : \n");
-printf("3<- Pentru modificare cerinte candidat : \n");
-printf("4<- Pentru modificare descrierea responsabilitati si facilitati : \n");
-printf("5<- Pentru modificare date de contact : \n");
-printf("Introduceti cifra corespunzatoare : ");
-scanf("%d",&cifra);
-printf("%d a fost modificat ",cifra);
-
-}
-
-void modificare_CV(){
-    int cifra;
-printf("1<- Pentru modificare nume : \n");
-printf("2<- Pentru modificare anul nasterii  : \n");
-printf("3<- Pentru modificare numarul de telefon : \n");
-printf("4<- Pentru modificare informatiilor de contact : \n");
-printf("5<- Pentru modificare date despre experienta : \n");
-printf("6<- Pentru modificare jobului dorit : \n");
-printf("7<- Pentru modificare abilitatilor dumneavoastra : \n");
-printf("8<- Pentru modificare descrierii : \n");
-printf("Introduceti cifra corespunzatoare : ");
-scanf("%d",&cifra);
-printf("%d a fost modificat ",cifra);
-
-}
 
 
 
@@ -410,13 +356,238 @@ void inapoi(){
     {
         Depunere_oferta();
     }
-    //if(cifra_introdusa == 5)
-   // {
-   //     modificare_stergere();
-  //  }
 
     if(cifra_introdusa == 5)
     {
         exit(0);
     }
+}
+
+// stergere CV
+void Stergere(const char* id_de_sters) {
+    FILE* fisier = fopen("CV_uri.txt", "r");
+    FILE* temp = fopen("temp.txt", "w");
+
+    if (fisier == NULL) {
+        printf("Nu s-a putut deschide fisierul.\n");
+        return;
+    }
+
+    char buffer[1000];
+    int structura_gasita = 0;
+    int sterge_structura = 0;
+
+    while (fgets(buffer, 1000, fisier)) {
+        if (strstr(buffer, id_de_sters) != NULL) {
+            structura_gasita = 1;
+            sterge_structura = 1;
+        } else {
+            if (sterge_structura == 1) {
+                if (buffer[0] == '\n') {
+                    sterge_structura = 0;
+                }
+            } else {
+                fputs(buffer, temp);
+            }
+        }
+    }
+
+    fclose(fisier);
+    fclose(temp);
+
+    if (structura_gasita) {
+        remove("CV_uri.txt");
+        rename("temp.txt", "CV_uri.txt");
+        printf("Structura cu ID-ul %s a fost stearsa cu succes.\n", id_de_sters);
+    } else {
+        remove("temp.txt");
+        printf("Nu s-a gasit nicio structura cu ID-ul %s.\n", id_de_sters);
+    }
+}
+// cautare cv dupa id
+void CautareDupaId(const char* id_cautat) {
+    FILE* fisier = fopen("CV_uri.txt", "r");
+    if (fisier == NULL) {
+        printf("Nu s-a putut deschide fisierul.\n");
+        return;
+    }
+
+    char buffer[1000];
+    int gasit = 0;
+
+    while (fgets(buffer, 1000, fisier)) {
+        if (strstr(buffer, id_cautat) != NULL) {
+            gasit = 1;
+            printf("%s", buffer);
+
+            // Citim si afisam restul structurii
+            for (int i = 0; i < 3; i++) {
+                fgets(buffer, 1000, fisier);
+                printf("%s", buffer);
+            }
+
+            // Am gasit structura, deci putem iesi din bucla
+            break;
+        }
+    }
+
+    fclose(fisier);
+
+    if (!gasit) {
+        printf("Nu s-a gasit nicio structura cu ID-ul %s.\n", id_cautat);
+    }
+}
+
+void CautareDupaId_Joburi(const char* id_cautat) {
+    FILE* fisier = fopen("CV_uri.txt", "r");
+    if (fisier == NULL) {
+        printf("Nu s-a putut deschide fisierul.\n");
+        return;
+    }
+
+    char buffer[1000];
+    int gasit = 0;
+
+    while (fgets(buffer, 1000, fisier)) {
+        if (strstr(buffer, id_cautat) != NULL) {
+            gasit = 1;
+            printf("%s", buffer);
+
+            // Citim si afisam restul structurii
+            for (int i = 0; i < 4; i++) {
+                fgets(buffer, 1000, fisier);
+                printf("%s", buffer);
+            }
+
+            // Am gasit structura, deci putem iesi din bucla
+            break;
+        }
+    }
+
+    fclose(fisier);
+
+    if (!gasit) {
+        printf("Nu s-a gasit nicio structura cu ID-ul %s.\n", id_cautat);
+    }
+}
+
+
+void StergereDupaId(const char* id_de_sters) {
+    FILE* fisier = fopen("Joburi.txt", "r");
+    FILE* temp = fopen("temp2.txt", "w");
+
+    if (fisier == NULL) {
+        printf("Nu s-a putut deschide fisierul.\n");
+        return;
+    }
+
+    char buffer[1000];
+    int structura_gasita = 0;
+    int sterge_structura = 0;
+
+    while (fgets(buffer, 1000, fisier)) {
+        if (strstr(buffer, id_de_sters) != NULL) {
+            structura_gasita = 1;
+            sterge_structura = 1;
+        } else {
+            if (sterge_structura == 1) {
+                if (buffer[0] == '\n') {
+                    sterge_structura = 0;
+                }
+            } else {
+                fputs(buffer, temp);
+            }
+        }
+    }
+
+    fclose(fisier);
+    fclose(temp);
+
+    if (structura_gasita) {
+        remove("Joburi.txt");
+        rename("temp2.txt", "Joburi.txt");
+        printf("Structura cu ID-ul %s a fost stearsa cu succes.\n", id_de_sters);
+    } else {
+        remove("temp2.txt");
+        printf("Nu s-a gasit nicio structura cu ID-ul %s.\n", id_de_sters);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------------------------------------------
+void modificare_stergere()
+{
+    int alegere,id;
+    printf("1 <- Pentru modificare ofertei :\n");
+    printf("2 <- Pentru stergerea ofertei :\n");
+    printf("3 <- Inapoi\n");
+
+    printf("Introduceti cifra corespunzatoare : ");
+    scanf("%d",&alegere);
+    if(alegere == 1)
+    {
+        printf("introduceti id : ");
+        scanf("%d",&id);
+        modificare_Oferta();
+        system("pause");
+        system("cls");
+        inapoi();
+    }
+    if(alegere == 2)
+    { printf("introduceti id : ");
+    scanf("%d",&id);
+        printf("%d a fost sters \n",id);
+        system("pause");
+
+
+        system("cls");
+        inapoi();
+    }
+    if(alegere == 3)
+    {system("cls");
+        inapoi();
+    }
+}
+
+
+
+void modificare_Oferta(){
+    int cifra;
+printf("1<- Pentru modificare numele companiei : \n");
+printf("2<- Pentru modificare tipul jobului : \n");
+printf("3<- Pentru modificare cerinte candidat : \n");
+printf("4<- Pentru modificare descrierea responsabilitati si facilitati : \n");
+printf("5<- Pentru modificare date de contact : \n");
+printf("Introduceti cifra corespunzatoare : ");
+scanf("%d",&cifra);
+printf("%d a fost modificat ",cifra);
+
+}
+
+void modificare_CV(){
+    int cifra;
+printf("1<- Pentru modificare nume : \n");
+printf("2<- Pentru modificare anul nasterii  : \n");
+printf("3<- Pentru modificare numarul de telefon : \n");
+printf("4<- Pentru modificare informatiilor de contact : \n");
+printf("5<- Pentru modificare date despre experienta : \n");
+printf("6<- Pentru modificare jobului dorit : \n");
+printf("7<- Pentru modificare abilitatilor dumneavoastra : \n");
+printf("8<- Pentru modificare descrierii : \n");
+printf("Introduceti cifra corespunzatoare : ");
+scanf("%d",&cifra);
+printf("%d a fost modificat ",cifra);
+
 }
