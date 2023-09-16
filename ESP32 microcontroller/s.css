@@ -1,0 +1,98 @@
+body {
+  background: radial-gradient(circle, rgb(84, 153, 184) 38%, rgba(148,187,233,1) 100%);
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+  
+  justify-content: center;
+  }
+:root{
+  --percentage-g: 0%;
+  --perc-led: 0;
+  --pwm-led: 0;
+}
+
+#border{
+  border-color: rgb(0, 66, 141);
+}
+
+#builtin-led-button, #aed, #E,#buttonscrapper{
+    background-color: blue; /* Culoarea inițială (ON) */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#redirect, #aed, #E,#buttonscrapper{
+  background-color: blue; /* Culoarea inițială (ON) */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+  
+  
+.custom-button {
+  background-color: blue; /* Culoarea inițială (ON) */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+  
+
+#builtin-led-button{
+  transform:scale(1);
+  transition: all.5s;
+  transition-duration: .1s;
+}
+#builtin-led-button:active{
+  transform:scale(1.1);
+}
+#buttonscrapper:hover{
+  transform:scale(1.1);
+}
+
+
+
+#led{
+  border-radius: 100%;
+  background: aqua;
+  background: linear-gradient(90deg,rgb(245, 71, 28),var(--perc-led),rgb(255, 255, 255) var(--perc-led));
+  width: 30px;
+  height: 30px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#pwm_led{
+
+  border-radius: 100%;
+  background: aqua;
+  background: conic-gradient(rgb(5, 122, 255),var(--pwm-led),rgb(242, 36, 118) var(--pwm-led));
+  width: 100px;
+  height: 100px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+#mode{
+border:0px;
+position: absolute;
+top: 0;
+right: 0;
+background-color: transparent;
+border-radius: 50%;
+font-size: 70px;
+}
+.dark-mode{
+  background: radial-gradient(circle, rgb(179, 159, 167) 0%, rgb(12, 12, 12) 100%);
+}

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="sec.css">
+    <script src="sec.js" defer></script>
+
+    <title>A</title>
+
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <div class="header">
+        <button id="first">Pagina anterioara</button>
+        <div class="hed text">
+            <h1>Esp32</h1>
+
+        </div>
+    </div>
+
+    <img id="esp" src="esp.png">
+
+
+    <div class="container">
+        <div class="left-buttons">
+
+            <button class="left-button" style="top: 215px; left: 515px;">GPIO36</button>
+            <button class="adc" style="top: 215px; left: 430px;">ADC1 CH0</button>
+            <button class="sensor" style="top: 215px; left: 350px;">Sensor VP</button>
+            <button class="rtc" style="top: 215px; left: 260px;">RTC_GPIO0</button>
+
+
+            <button class="left-button" style="top: 240px; left: 515px;">GPIO39</button>
+            <button class="adc" style="top: 240px; left: 430px;">ADC1 CH3</button>
+            <button class="sensor" style="top: 240px; left: 350px;">Sensor VN</button>
+            <button class="rtc" style="top: 240px; left: 260px;">RTC_GPIO3</button>
+
+            <button class="left-button" style="top: 265px; left: 515px;">GPIO34</button>
+            <button class="adc" style="top: 265px; left: 430px;">ADC1 CH6</button>
+            <button class="rtc" style="top: 265px; left: 345px;">RTC_GPIO4</button>
+
+            <button class="left-button" style="top: 290px; left: 515px;">GPIO35</button>
+            <button class="adc" style="top: 290px; left: 430px;">ADC1 CH7</button>
+            <button class="rtc" style="top: 290px; left: 345px;">RTC_GPIO5</button>
+
+            <button class="left-button" style="top: 315px; left: 515px;">GPIO32</button>
+            <button class="adc" style="top: 315px; left: 430px;">ADC1 CH4</button>
+            <button class="touch" style="top: 315px; left: 360px;">TOUCH9</button>
+            <button class="rtc" style="top: 315px; left: 260px;">RTC_GPIO9</button>
+
+            <button class="left-button" style="top: 340px; left: 515px;">GPIO33</button>
+            <button class="adc" style="top: 340px; left: 430px;">ADC1 CH5</button>
+            <button class="touch" style="top: 340px; left: 360px;">TOUCH8</button>
+            <button class="rtc" style="top: 340px; left: 260px;">RTC_GPIO8</button>
+
+            <button class="left-button" style="top: 365px; left: 515px;">GPIO25</button>
+            <button class="adc" style="top: 365px; left: 430px;">ADC2 CH8</button>
+            <button class="dac" style="top: 365px; left: 360px;">DAC1</button>
+            <button class="rtc" style="top: 365px; left: 260px;">RTC_GPIO6</button>
+
+            <button class="left-button" style="top: 390px; left: 515px;">GPIO26</button>
+            <button class="adc" style="top: 390px; left: 430px;">ADC2 CH9</button>
+            <button class="dac" style="top: 390px; left: 360px;">DAC2</button>
+            <button class="rtc" style="top: 390px; left: 260px;">RTC_GPIO7</button>
+
+            <button class="left-button" style="top: 415px; left: 515px;">GPIO27</button>
+            <button class="adc" style="top: 415px; left: 430px;">ADC2 CH7</button>
+            <button class="touch" style="top: 415px; left: 360px;">TOUCH7</button>
+            <button class="rtc" style="top: 415px; left: 260px;">RTC_GPIO17</button>
+
+            <button class="left-button" style="top: 440px; left: 515px;">GPIO14</button>
+            <button class="adc" style="top: 440px; left: 430px;">ADC2 CH6</button>
+            <button class="touch" style="top: 440px; left: 360px;">TOUCH8</button>
+            <button class="HSPI" style="top: 440px; left: 260px;">HSPI CLK</button>
+            <button class="rtc" style="top: 440px; left: 165px;">RTC_GPIO16</button>
+
+            <button class="left-button" style="top: 465px; left: 515px;">GPIO12</button>
+            <button class="adc" style="top: 465px; left: 430px;">ADC2 CH5</button>
+            <button class="touch" style="top: 465px; left: 360px;">TOUCH5</button>
+            <button class="HSPI" style="top: 465px; left: 260px;">HSPI MISO</button>
+            <button class="rtc" style="top: 465px; left: 165px;">RTC_GPIO15</button>
+
+            <button class="left-button" style="top: 490px; left: 515px;">GPIO13</button>
+            <button class="adc" style="top: 490px; left: 430px;">ADC2 CH4</button>
+            <button class="touch" style="top: 490px; left: 360px;">TOUCH4</button>
+            <button class="HSPI" style="top: 490px; left: 260px;">HSPI MOSI</button>
+            <button class="rtc" style="top: 490px; left: 165px;">RTC_GPIO14</button>
+
+            <button id="GND" class="left-button" style="top: 515px; left: 540px;">GND</button>
+            <button id="VIN" class="left-button" style="top: 535px; left: 547px;">VIN</button>
+            <div id="buttonListContainer"></div>
+
+        </div>
+        <div class="right-buttons">
+            <button class="left-button" style="top: 200px; left: 832px;">GPIO23</button>
+            <button class="vspi" style="top: 200px; left: 900px;">VSPI MOSI</button>
+
+            <button class="left-button" style="top: 225px; left: 832px;">GPIO22</button>
+            <button class="I2C" style="top: 225px; left: 900px;">I2C SCL</button>
+
+            <button class="left-button" style="top: 250px; left: 832px;">GPIO1</button>
+            <button class="UART" style="top: 250px; left: 900px;">UART 0 TX</button>
+
+            <button class="left-button" style="top: 275px; left: 832px;">GPIO3</button>
+            <button class="UART" style="top: 275px; left: 900px;">UART 0 RX</button>
+
+            <button class="left-button" style="top: 300px; left: 832px;">GPIO21</button>
+            <button class="I2C" style="top: 300px; left: 900px;">I2C SDA</button>
+
+            <button class="left-button" style="top: 325px; left: 832px;">GPIO19</button>
+            <button class="vspi" style="top: 325px; left: 900px;">VSPI MISO</button>
+
+            <button class="left-button" style="top: 350px; left: 832px;">GPIO18</button>
+            <button class="vspi" style="top: 350px; left: 900px;">VSPI CLK</button>
+
+            <button class="left-button" style="top: 375px; left: 832px;">GPIO5</button>
+            <button class="vspi" style="top: 375px; left: 900px;">VSPI CSO</button>
+
+            <button class="left-button" style="top: 400px; left: 832px;">GPIO17</button>
+            <button class="UART" style="top: 400px; left: 900px;">UART 2 TX</button>
+
+            <button class="left-button" style="top: 425px; left: 832px;">GPIO16</button>
+            <button class="UART" style="top: 425px; left: 900px;">UART 2 RX</button>
+
+            <button class="left-button" style="top: 450px; left: 832px;">GPIO4</button>
+            <button class="adc" style="top: 450px; left: 900px;">ADC2 CH0</button>
+            <button class="touch" style="top: 450px; left: 985px;">TOUCH0</button>
+            <button class="rtc" style="top: 450px; left: 1055px;">RTC_GPIO10</button>
+
+
+            <button class="left-button" style="top: 475px; left: 832px;">GPIO2</button>
+            <button class="adc" style="top: 475px; left: 900px;">ADC2 CH2</button>
+            <button class="touch" style="top: 475px; left: 985px;">TOUCH2</button>
+            <button class="rtc" style="top: 475px; left: 1055px;">RTC_GPIO12</button>
+
+
+            <button class="left-button" style="top: 500px; left: 832px;">GPIO15</button>
+            <button class="adc" style="top: 500px; left: 900px;">ADC2 CH3</button>
+            <button class="touch" style="top: 500px; left: 985px;">TOUCH3</button>
+            <button class="HSPI" style="top: 500px; left: 1055px;">HSPI CSO</button>
+            <button class="rtc" style="top: 500px; left: 1130px;">RTC_GPIO13</button>
+
+            <button id="GND" class="left-button" style="top: 525px; left: 832px;">GND</button>
+
+            <button id="V3" class="left-button" style="top: 545px; left: 832px;">3.3V</button>
+
+
+        </div>
+    </div>
+    <div id="circle2"></div>
+    <div id="circle"></div>
+    <button onclick=" changeColor('blue')" id="blue">Albastru</button>
+    <button onclick="changeColor('gray')" id="gray">Gri</button>
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+<!-- <div class="weatherWidget"></div>
+
+<script>
+    window.weatherWidgetConfig = window.weatherWidgetConfig || [];
+    window.weatherWidgetConfig.push({
+        selector: ".weatherWidget",
+        apiKey: "bda9ac916fbb8008e33c921c236b17d2", //Sign up for your personal key
+        location: "Romania, Timisoara", //Enter an address
+        unitGroup: "metric", //"us" or "metric"
+        forecastDays: 5, //how many days forecast to show
+        title: "Romania,Timisoara", //optional title to show in the 
+        showTitle: true,
+        showConditions: true
+    });
+
+    (function () {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://www.visualcrossing.com/widgets/forecast-simple/weather-forecast-widget-simple.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script> -->

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="s.css">
+  <script type="text/javascript" src="chart.js"></script>
+  <script src="script.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+
+
+
+</head>
+
+<body>
+
+  <input type="button" id="mode" value="&#x1F311" onclick="changecolor()"
+    style="background-color: transparent;"></input>
+
+  <p id="g"></p>
+  <h1>Esp32 Control</h1>
+  <p>ON/OFF led 2 </p>
+
+  <input type="button" id="builtin-led-button" class="custom-button" value="ON" onclick="ChangeButtonState()"></input>
+
+  <!-- <h2><input type="button" display="block" onclick="ChangeButtonState()" value="ON" id="builtin-led-button"
+      class="OFF"></input>
+    <div id="led"></div>
+  </h2> -->
+
+
+  </div>
+  <h3><input type="text" placeholder="Intensitate" name="print sth on serial" id="aed" value=""></h3>
+  <h4>
+    <p> Touch Value</p>
+    <div id='x'>
+      <p>20</p>
+    </div>
+
+  </h4>
+  <h5><input type="range" placeholder="pwm(%)" name="PWM in" id="E" value="" min="0" max="100">
+    <div id="pwm_led"></div>
+  </h5>
+
+  <div>
+    <canvas id="chart" style=" margin-left: auto;
+      margin-right: auto; width:72%;"></canvas>
+  </div>
+
+  <button id="redirect">Pagina urmatoare</button>
+  <script>
+    document.getElementById("redirect").addEventListener('click', function () {
+      window.location.href = "Second.html";
+    });
+
+
+  </script>
+
+</body>
+
+</html>
