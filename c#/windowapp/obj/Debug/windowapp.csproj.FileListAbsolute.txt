@@ -1,0 +1,17 @@
+C:\Users\User\source\repos\windowapp\bin\Debug\windowapp.exe.config
+C:\Users\User\source\repos\windowapp\bin\Debug\windowapp.exe
+C:\Users\User\source\repos\windowapp\bin\Debug\windowapp.pdb
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp.csproj.AssemblyReference.cache
+C:\Users\User\source\repos\windowapp\obj\Debug\App.g.cs
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp_MarkupCompile.cache
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp_MarkupCompile.lref
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp.g.resources
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp.Properties.Resources.resources
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp.csproj.GenerateResource.cache
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp.exe
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp.pdb
+C:\Users\User\source\repos\windowapp\obj\Debug\Window1.g.cs
+C:\Users\User\source\repos\windowapp\obj\Debug\Window1.baml
+C:\Users\User\source\repos\windowapp\bin\Debug\Guna.UI2.dll
+C:\Users\User\source\repos\windowapp\obj\Debug\windowapp.csproj.CopyComplete

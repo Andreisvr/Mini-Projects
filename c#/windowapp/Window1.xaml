@@ -1,0 +1,39 @@
+﻿<Window x:Class="windowapp.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:windowapp"
+        mc:Ignorable="d"
+        Title="Window1" Height="608" Width="991">
+    <Grid x:Name="second_grid">
+        <Label Content="Name" HorizontalAlignment="Left" Margin="108,121,0,0" VerticalAlignment="Top" Background="{x:Null}" RenderTransformOrigin="0.541,0.42" Width="134" FontSize="18" Foreground="#FF424040" FontWeight="Bold" FontStyle="Italic"/>
+        <TextBox x:Name="Name" HorizontalAlignment="Left" Margin="75,160,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Height="32" FontSize="18" FontWeight="Bold" Foreground="#FF424040" SelectionBrush="#FFEBF3F9"/>
+        <Label Content="Year of study" HorizontalAlignment="Left" Margin="105,211,0,0" VerticalAlignment="Top" Background="{x:Null}" RenderTransformOrigin="0.541,0.42" Width="133" FontSize="18" Foreground="#FF424040" FontWeight="Bold" FontStyle="Italic"/>
+        <TextBox x:Name="study_year" HorizontalAlignment="Left" Margin="75,250,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Height="32" FontSize="18" FontWeight="Bold" Foreground="#FF424040" SelectionBrush="{x:Null}"/>
+        <Label Content="Age" HorizontalAlignment="Left" Margin="105,300,0,0" VerticalAlignment="Top" Background="{x:Null}" RenderTransformOrigin="0.541,0.42" Width="133" FontSize="18" Foreground="#FF424040" FontWeight="Bold" FontStyle="Italic"/>
+        <TextBox x:Name="Age" HorizontalAlignment="Left" Margin="75,340,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="232" Height="32" FontSize="18" FontWeight="Bold" Foreground="#FF424040" SelectionBrush="{x:Null}"/>
+        <Label Content="Label" HorizontalAlignment="Left" Height="592" VerticalAlignment="Center" Width="65" Background="#FF424040"/>
+        <Label Content="                                                            Search" HorizontalAlignment="Left" Height="58" Margin="65,0,0,0" VerticalAlignment="Top" Width="926" Background="#FF424040" Foreground="#FFFBF2F2" FontSize="24"/>
+        <Label Content="" HorizontalAlignment="Left" Height="534" Margin="323,58,0,0" VerticalAlignment="Top" Width="8" Background="#FF424040"/>
+        <Button x:Name="add_btn" Content="Add" HorizontalAlignment="Left" Height="31" Margin="75,418,0,0" VerticalAlignment="Top" Width="67" Background="#FF0A8DF1" FontSize="16" Foreground="#FFF5F1F1" Click="add_btn_Click"/>
+        <Button x:Name="delet_btn" Content="Delete" HorizontalAlignment="Left" Height="31" Margin="229,418,0,0" VerticalAlignment="Top" Width="67" Background="#FFF54242" Foreground="#FFFBF6F6" FontSize="16" Click="delet_btn_Click"/>
+        <Button x:Name="search" Content="Search" HorizontalAlignment="Left" Height="31" Margin="152,473,0,0" VerticalAlignment="Top" Width="67" Background="#FF1EEF64" FontWeight="Bold" Foreground="#FF272323" FontSize="16" Click="search_Click"/>
+        <DataGrid x:Name="Data_grid" Margin="331,60,0,2">
+
+            <DataGrid.Resources>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property = "Background" Value="Turquoise"/>
+                    <Setter Property = "FontWeight" Value="SemiBold"/>
+                    <Setter Property = "BorderThickness" Value="0,0,1,2"/>
+                    <Setter Property = "BorderBrush" Value="Black"/>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="      Student Name" Width="220" Binding="{Binding student_name}"/>
+                <DataGridTextColumn Header="Student Year of study" Width="220" Binding="{Binding student_year_study}"/>
+                <DataGridTextColumn Header="  Student Age" Width="*" Binding="{Binding student_age}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
