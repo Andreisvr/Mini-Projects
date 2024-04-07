@@ -1,0 +1,230 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <dirent.h>
+
+typedef struct {
+    char filename[255];
+    char output[255];
+    int exit_code;
+    int match;
+} Rezultate;
+
+int prog_valid(const char *filename) {
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL) {
+        printf("\033[1;31mEroare la deschiderea fisierului pentru verificarea functiei main %s\n\033[0m", filename);
+        exit(EXIT_FAILURE);
+    }
+
+    char content[1024];
+    size_t len = fread(content, sizeof(char), sizeof(content) - 1, fp);
+    content[len] = '\0';
+    fclose(fp);
+
+    if (strstr(content, "main(") == NULL) {
+        printf("\033[1;31mFisierul '%s' NU contine functia main\n\033[0m", filename);
+        return 0;
+    }
+
+    char compile_cmd[512];
+    snprintf(compile_cmd, sizeof(compile_cmd), "gcc -fsyntax-only %s", filename);
+
+    int compile_result = system(compile_cmd);
+
+    if (compile_result == 0) {
+        return 1;
+    } else {
+        printf("\033[1;31mProgramul C din fisierul '%s' NU este valid.\n\033[0m", filename);
+        return 0;
+    }
+}
+
+int este_C_file(char *file) {
+    char *extensie = strrchr(file, '.');
+    if (extensie != NULL && strcmp(extensie, ".c") == 0)
+        return 1;
+    return 0;
+}
+void compile_run(const char *file, const char *folder_path, Rezultate *results, int *num_results) {
+    char output_folder[512];
+    snprintf(output_folder, sizeof(output_folder), "%s/Output", folder_path);
+
+    struct stat st = {0};
+    if (stat(output_folder, &st) == -1) {
+        mkdir(output_folder, 0700);
+    }
+
+    char compile_cmd[512];
+    char run_cmd[512];
+
+    char abs_path[512];
+    snprintf(abs_path, sizeof(abs_path), "%s/%s", folder_path, file);
+
+    if (!prog_valid(abs_path)) {
+        return;
+    }
+
+    snprintf(compile_cmd, sizeof(compile_cmd), "gcc %s -o %s/%s.out", abs_path, output_folder, file);
+
+    if (system(compile_cmd) == 0) {
+        snprintf(run_cmd, sizeof(run_cmd), "%s/%s.out", output_folder, file);
+
+        FILE *fp = fopen(abs_path, "r");
+        if (fp == NULL) {
+            printf("\033[1;31meroare deschidere file \n\033[0m");
+            exit(EXIT_FAILURE);
+        }
+
+        char content[1024];
+        size_t len = fread(content, sizeof(char), sizeof(content) - 1, fp);
+        content[len] = '\0';
+        fclose(fp);
+
+        if (strstr(content, "int main(") == NULL) {
+            printf("\033[1;31m eroare pentru %s - Nu este main function\n\033[0m", abs_path);
+            return;
+        }
+
+        fp = popen(run_cmd, "r");
+        if (fp == NULL) {
+            printf("eroare deschidere file\n");
+            exit(EXIT_FAILURE);
+        }
+
+        char output[1024];
+        len = fread(output, sizeof(char), sizeof(output), fp);
+        output[len] = '\0';
+
+        int exit_code = pclose(fp);
+
+        snprintf(results[*num_results].filename, sizeof(results[*num_results].filename), "%s", abs_path);
+        snprintf(results[*num_results].output, sizeof(results[*num_results].output), "%s", output);
+
+        results[*num_results].exit_code = exit_code;
+        results[*num_results].match = 0;
+        (*num_results)++;
+    } else {
+        printf("\033[1;31meroare compilate : %s\n\033[0m", abs_path);
+    }
+}
+
+
+void search_prin_dir(const char *folder_path, Rezultate *results, int *num_results) {
+    DIR *dir;
+    struct dirent *entry;
+
+    if ((dir = opendir(folder_path)) == NULL) {
+        printf("Eroare la deschiderea dir\n");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_type == DT_DIR) {
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
+                continue;
+            }
+
+            char subfolder_path[255];
+            snprintf(subfolder_path, sizeof(subfolder_path), "%s/%s", folder_path, entry->d_name);
+            search_prin_dir(subfolder_path, results, num_results);
+        } else if (entry->d_type == DT_REG) {
+            char abs_path[255];
+            snprintf(abs_path, sizeof(abs_path), "%s/%s", folder_path, entry->d_name);
+
+            if (este_C_file(abs_path) == 0) {
+                printf("\033[1;31mFisierul %s nu este de tip .c\n\033[0m", entry->d_name);
+               
+                continue;
+            }
+
+            compile_run(entry->d_name, folder_path, results, num_results);
+        }
+    }
+
+    closedir(dir);
+    printf("\n");
+}
+
+void cautare_testare(Rezultate *results, int num_results) {
+    DIR *dir;
+    struct dirent *entry;
+
+    if ((dir = opendir("test")) == NULL) {
+        printf("\033[1;31mEroare la deschiderea dir test\n\033[0m");
+        exit(EXIT_FAILURE);
+    }
+
+    while ((entry = readdir(dir)) != NULL) {
+        if (entry->d_type == DT_REG) {
+            char abs_path[512];
+            snprintf(abs_path, sizeof(abs_path), "test/%s", entry->d_name);
+
+            FILE *file = fopen(abs_path, "r");
+            if (file == NULL) {
+                printf("\033[1;31meroare la deschiderea file din test\n\033[0m");
+                continue;
+            }
+
+            char content[5024];
+            size_t len = fread(content, sizeof(char), sizeof(content) - 1, file);
+            content[len] = '\0';
+            fclose(file);
+
+            int test_corect = 0;
+            int exit_cd = 0;
+
+            for (int i = 0; i < num_results; i++) {
+                if (results[i].match == 1) {
+                    continue;
+                }
+
+                if (strstr(content, results[i].output) != NULL) {
+                    printf("File testat corect: %s cu exit codu %d\n", results[i].filename, results[i].exit_code);
+                    results[i].match = 1;
+                    exit_cd = 1;
+                    break;
+                }
+            }
+
+            if (exit_cd == 1) {
+                continue;
+            }
+
+          
+        }
+    }
+    
+       for(int i=0;i<num_results;i++){
+                if (results[i].match == 0) {
+                    printf("\033[1;31mFile testat incorect : %s cum codul %d\n\033[0m", results[i].filename, results[i].exit_code);
+ }
+ }
+    closedir(dir);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Utilizare: %s folder_path\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    char *folder_path = argv[1];
+
+    Rezultate results[255];
+    int num_results = 0;
+
+    search_prin_dir(folder_path, results, &num_results);
+
+    for (int i = 0; i < num_results; i++) {
+        printf("Fisier: %s\nOutput:%s\n", results[i].filename, results[i].output);
+        fflush(stdout);
+    }
+     printf("\n");
+
+   cautare_testare(results, num_results);
+
+    return 0;
+}
