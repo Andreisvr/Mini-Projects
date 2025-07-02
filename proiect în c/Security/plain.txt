@@ -1,0 +1,154 @@
+B
+#pentur 4 gb 95sec cridslkdsmptate si 85 decriptarea 
+#din rc4 tea rsa cbc
+#pentru rc4 30 sec criptare 
+#rsa 
+Dds 112 dcdd
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Calculează cel mai mare divizor comun (GCD) folosind algoritmul lui Euclid
+int gcd(int a, int b) {
+    while (b != 0) {
+        int t = b;
+        b = a % b;
+        a = t;
+    }
+    return a;
+}
+
+// Calculează criptedt = (base ^ expo) % m folosind exponențiere modulară rapidă
+// evita  ridica direct la putere , folosim exponentiere binară
+// exemplu base 13=base^8 * base^4 * base^1
+ 
+int power(int base, int expo, int m) {
+    int result = 1;              
+    base = base % m;          // Reducem baza modulo m pentru a evita overflow
+
+    while (expo > 0) {       
+        if (expo & 1)         // Dacă bitul cel mai puțin semnificativ este 1 e este impar
+            result = (result * base) % m;  // Înmulțim rezultatul cu baza și luăm modulo
+
+        base = (base * base) % m;   // Ridicăm baza la pătrat și reducem modulo
+        expo = expo / 2;           
+    }
+    if (result < 0) {
+        result += m;
+    }
+
+    return result;  //result modulo (base^e) mod m => rest         
+}
+
+// Caută inversul modular al lui e modulo phi, adică d unde (e * d) % phi == 1
+int modInverse(int e, int phi) {
+    for (int d = 2; d < phi; d++) {
+        if ((e * d) % phi == 1)
+            return d;
+    }
+    return -1;  // dacă nu s-a găsit
+}
+
+// Generează cheile RSA: e, d și n folosind p și q primite implicit
+void generateKeys(int *e, int *d, int *n) {
+    int p = 2, q = 7;   // două numere prime
+    *n = p * q;               // n = produsul celor două numere prime
+    int phi = (p - 1) * (q - 1);  // funcția Euler
+
+    // Găsim e coprim cu phi
+    for (*e = 2; *e < phi; (*e)++) {
+        if (gcd(*e, phi) == 1)
+            break;
+    }
+
+    // Calculăm d, inversul lui e modulo phi
+    *d = modInverse(*e, phi);
+}
+
+// Criptează un caracter (m) folosind cheia publică (e, n)
+int encryptChar(int m, int e, int n) {
+    int encrypted = power(m, e, n);
+    printf("Encrypted: %d\n", encrypted);  // Adaugă print pentru valoarea criptată
+    return encrypted;
+}
+
+// Decriptează un caracter (c) folosind cheia privată (d, n)
+int decryptChar(int c, int d, int n) {
+    int decrypted = power(c, d, n);
+    printf("Decrypted: %d\n", decrypted);  // Adaugă print pentru valoarea decriptată
+    return decrypted;
+}
+
+// Criptează fișierul în modul CBC pe blocuri de 64 de biți => result = Ecnrypted(text xor iv )
+// result = Ecnrypted(text xor result[i-1] )
+
+void encryptFileCBC(const char *inputFile, const char *outputFile, int e, int n, int iv) {
+    FILE *in = fopen(inputFile, "r");
+    FILE *out = fopen(outputFile, "w");
+    if (!in || !out) {
+        perror("File error");
+        exit(1);
+    }
+
+    int prev = iv;
+    int ch;
+    while ((ch = fgetc(in)) != EOF) {
+        int xored = ch ^ prev;
+        int encrypted = encryptChar(xored, e, n);
+        fprintf(out, "%d ", encrypted);
+        prev = encrypted;
+    }
+
+    fclose(in);
+    fclose(out);
+    }
+
+
+// Decriptează fișierul în modul CBC
+void decryptFileCBC(const char *inputFile, const char *outputFile, int d, int n, int iv) {
+    FILE *in = fopen(inputFile, "r");
+    if (!in) {
+        perror("File error");
+        exit(1);
+    }
+
+    int prev = iv;
+    int enc;
+    printf("Decrypted Message: ");
+    while (fscanf(in, "%d", &enc) == 1) {
+        int decrypted = decryptChar(enc, d, n);
+        char orig = (char)(decrypted ^ prev);
+        printf("%c", orig);
+        prev = enc;
+    }
+
+    printf("\n");
+    fclose(in);
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 7 || (strcmp(argv[1], "-e") != 0 && strcmp(argv[1], "-d") != 0)) {
+        printf("Usage:\n");
+        printf("  ./crypto -e plain.txt -k KEY(number) -o cripted.txt\n");
+        printf("  ./crypto -d cripted.txt -k KEY(number) -o result.txt\n");
+        return 1;
+    }
+
+    char *mode = argv[1];       // "-e" sau "-d"
+    char *inputFile = argv[2];  // fișierul de intrare
+    int key = atoi(argv[4]);    // cheia inițială CBC (IV)
+    char *outputFile = argv[6]; // fișierul de ieșire
+
+    int e, d, n;
+    generateKeys(&e, &d, &n);   // generăm cheile RSA
+
+    if (strcmp(mode, "-e") == 0) {
+        encryptFileCBC(inputFile, outputFile, e, n, key);
+        printf("File encrypted to %s using CBC mode.\n", outputFile);
+    } else {
+        decryptFileCBC(inputFile, outputFile, d, n, key);
+        printf("File decrypted to %s using CBC mode.\n", outputFile);
+    }
+
+    return 0;
+}
